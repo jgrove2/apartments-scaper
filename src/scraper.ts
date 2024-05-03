@@ -1,3 +1,4 @@
+import { sleep } from 'bun';
 import * as cheerio from 'cheerio';
 
 interface ApartmentData {
@@ -5,25 +6,48 @@ interface ApartmentData {
     value: string;
 }
 
-export async function getHtmlFromURL(url: string) {
+export class Apartment {
+    $url: string;
+    $price: number;
+    $bedrooms: number;
+    $bathrooms: number;
+
+    constructor(url: string = "", price: number = -1, bedrooms: number = -1, bathrooms: number = -1){
+        this.$url = url;
+        this.$price = price;
+        this.$bedrooms = bedrooms;
+        this.$bathrooms = bathrooms;
+    }
+}
+
+export async function getApartmentDataFromURL(url: string) {
     try {
+        console.log("[getApartmentDataFromURL]: starting function...");
         var body = await getHtmlText(url);
         var root = await getCheerioRoot(body);
         var apartmentSet = getApartmentLinks(root);
         var apartmentData: ApartmentData[][] = [];
     
-        apartmentSet.forEach(async function (value, key, set) {
-            var apartment_obj = await getIndividualApartmentData(value);
-            console.log(value);
+        console.log("[getIndividualApartmentData]: Getting all apartment data...");
+        for (const url of apartmentSet){
+            await sleep(10000 * Math.random());
+            var apartment_obj = await getIndividualApartmentData(url);
             apartmentData.push(apartment_obj);
-            console.log(apartment_obj);
+        }
+        console.log("[getIndividualApartmentData]: finishing function...");
+        
+        console.log("[apartmentParsedData]: parsing all apartment data for sqlite...");
+        let apartmentParsedData: Apartment[] = [];
+        apartmentData.forEach((apartment) => {
+            apartmentParsedData.push(parseApartmentData(apartment));
         });
-
-        return apartmentData;
+        console.log("[apartmentParsedData]: finished parsing functions...");
+        console.log("[getApartmentDataFromURL]: ending function...");
+        return apartmentParsedData;
         
     } catch (error) {
-        console.log(error);
-        throw error
+        console.error("[getApartmentDataFromURL]: Error ocured in this function", error)
+        throw new Error("Error getting apartment data from url");
     }
 }
 
@@ -45,13 +69,21 @@ async function getCheerioRoot(body: string){
 }
 
 function getApartmentLinks(root: cheerio.Root){
-    var apartmentSet = new Set<string>();
+    try{
+        console.log("[getApartmentLinks]: starting function...");
+        var apartmentSet = new Set<string>();
 
         root('.property-link').each((i, element) => {
             var link = root(element).attr('href');
             link ? apartmentSet.add(link) : null
         });
+        console.log("[getApartmentLinks]: starting function...");
         return apartmentSet;
+    }
+    catch(error){
+        console.error("[getApartmentLinks]: An error occured", error)
+        throw new Error("Error getting apartment data from url");
+    }
 }
 
 async function getIndividualApartmentData(url: string){
@@ -59,6 +91,7 @@ async function getIndividualApartmentData(url: string){
     var root = await getCheerioRoot(body);
 
     var apartment_data: ApartmentData[] = await getApartmentObject(root);
+    sleep(8000 * Math.random());
     var urlData: ApartmentData = {key: "url", value: url};
     apartment_data.push(urlData);
     return apartment_data;
@@ -105,4 +138,25 @@ function bedroomStringToInt(bedroomString: string): number {
     } else {
         return -1;
     }
+}
+
+function parseApartmentData(apartmentData: ApartmentData[]){
+    let apartment: Apartment = new Apartment();
+    apartmentData.forEach((pair, index) => {
+        switch(pair.key){
+            case("Monthly Rent"):
+                apartment.$price = rentStringToInt(pair.value);
+                break;
+            case("Bedrooms"):
+                apartment.$bedrooms = bedroomStringToInt(pair.value);
+                break;
+            case("Bathrooms"):
+                apartment.$bathrooms = bathroomStringToInt(pair.value);
+                break;
+            case("url"):
+                apartment.$url = pair.value;
+                break;
+        }
+    });
+    return apartment;
 }

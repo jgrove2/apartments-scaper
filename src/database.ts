@@ -27,7 +27,7 @@ export function insertAllNewApartments(apartmentData: {$url: string, $price: num
     console.log("[insertAllNewApartments]: Starting function...");
     var db = new Database('./db/apartments.db');
 
-    const insert = db.prepare('INSERT INTO apartments (url, price, bedrooms, bathrooms, new) VALUES ($url, $price, $bedrooms, $bathrooms, $new)');
+    const insert = db.prepare('INSERT or IGNORE INTO apartments (url, price, bedrooms, bathrooms, new) VALUES ($url, $price, $bedrooms, $bathrooms, $new)');
     const insertApartments = db.transaction(apartments => {
         for (const aprt of apartments) insert.run(aprt);
         return apartments.length;
@@ -35,7 +35,7 @@ export function insertAllNewApartments(apartmentData: {$url: string, $price: num
 
     const count = insertApartments(apartmentData);
 
-    console.log(`added ${count} apartments`);
+    console.log(`[insertAllNewApartments]: Added/Updated ${count} apartments`);
     db.close(false);
     console.log("[insertAllNewApartments]: Ending function...")
 }
@@ -45,13 +45,15 @@ export function createTableIfNotCreated() {
     var db = new Database('./db/apartments.db', {create: true});
     const query = db.query(`CREATE TABLE IF NOT EXISTS apartments (
         id INTEGER PRIMARY KEY,
-        url TEXT,
+        url TEXT UNIQUE,
         price INTEGER,
         bedrooms INTEGER,
         bathrooms REAL,
         new INTEGER
     )`);
     query.run();
+    const query2 = db.query(`CREATE UNIQUE INDEX url ON apartments (url)`);
+    query2.run();
     db.close(false);
     console.log("[CreateTableIfNotCreated]: ending function...");
 }

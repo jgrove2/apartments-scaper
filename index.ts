@@ -21,7 +21,7 @@ async function main(){
         // 
         // 
         const job = await CronJob.from({
-            cronTime: '0 50 9 * * *',
+            cronTime: '0 0 8 * * *',
             onTick: async function () {
                 let apartmentData = await getApartmentDataFromURL(location_url)
                 uploadApartmentsToDB(apartmentData);

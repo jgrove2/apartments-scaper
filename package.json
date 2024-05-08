@@ -2,9 +2,15 @@
   "name": "apartments-scraper",
   "module": "index.ts",
   "type": "module",
+  "scripts": {
+    "dev": "tsx watch index.ts",
+    "start": "bun run index.ts",
+    "build": "tsup index.ts --minify" 
+  },
   "devDependencies": {
     "@types/bun": "latest",
-    "@types/sqlite3": "^3.1.11"
+    "@types/sqlite3": "^3.1.11",
+    "eslint": "^9.2.0"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
@@ -13,7 +19,10 @@
     "@types/cheerio": "^0.22.35",
     "cheerio": "^1.0.0-rc.12",
     "cron": "^3.1.7",
+    "discord.js": "^14.14.1",
     "dotenv": "^16.4.5",
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^5.1.7",
+    "tsup": "^8.0.2",
+    "tsx": "^4.9.3"
   }
 }

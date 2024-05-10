@@ -3,7 +3,7 @@ import type IScraper from "../interfaces/IScraper";
 import Apartment from "./Apartment";
 import type ApartmentData from "./ApartmentData";
 import * as cheerio from "cheerio";
-import Logger from "./Logger";
+import Logger from "../../util/classes/Logger";
 
 export default class Scraper implements IScraper {
   logger: Logger;
@@ -141,6 +141,7 @@ export default class Scraper implements IScraper {
           break;
       }
     }
+    newApartment.$new = 1;
     return newApartment;
   }
 }

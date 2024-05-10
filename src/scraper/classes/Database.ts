@@ -2,7 +2,7 @@ import { Database as sqlite } from "bun:sqlite";
 
 import type IDatabase from "../interfaces/IDatabase";
 import type Apartment from "./Apartment";
-import Logger from "./Logger";
+import Logger from "../../util/classes/Logger";
 
 export default class Database implements IDatabase {
   db: sqlite;

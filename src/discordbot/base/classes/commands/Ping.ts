@@ -6,6 +6,6 @@ export default class Ping extends Command {
     super("ping", "Replies with pong");
   }
   async execute(interaction: CommandInteraction) {
-    await interaction.reply("Pong!");
+    await interaction.reply(`[Link](https://google.com)`);
   }
 }

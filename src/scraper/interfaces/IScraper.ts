@@ -1,6 +1,6 @@
 import type Apartment from "../classes/Apartment";
 import type ApartmentData from "../classes/ApartmentData";
-import type Logger from "../classes/Logger";
+import type Logger from "../../util/classes/Logger";
 
 export default interface Scraper {
   logger: Logger;

@@ -1,4 +1,14 @@
-import { Client, Collection, Events, GatewayIntentBits, InteractionCollector, Message, REST, Routes, SlashCommandBuilder } from "discord.js";
+import {
+  Client,
+  Collection,
+  Events,
+  GatewayIntentBits,
+  InteractionCollector,
+  Message,
+  REST,
+  Routes,
+  SlashCommandBuilder,
+} from "discord.js";
 import type ICustomClient from "../interfaces/ICustomClient";
 import type Command from "./Command";
 import Ping from "./commands/Ping";
@@ -10,7 +20,15 @@ export default class CustomClient extends Client implements ICustomClient {
   botId: string | undefined;
 
   constructor() {
-    super({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.DirectMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildIntegrations] });
+    super({
+      intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.DirectMessages,
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildIntegrations,
+      ],
+    });
 
     this.discordToken = Bun.env.DISCORD_TOKEN;
     this.botId = Bun.env.BOT_ID;
@@ -20,34 +38,43 @@ export default class CustomClient extends Client implements ICustomClient {
 
     this.on("ready", this.onReady.bind(this));
     this.on("interactionCreate", async (interaction) => {
-        if(!interaction.isCommand()) return;
-        console.log("getting interaction");
-        const {commandName} = interaction;
-        var command = this.commands.get(commandName);
-        if(command != undefined) await command.execute(interaction);
-        else interaction.reply("Nothing exists for that command");
-        console.log("executed");
+      if (!interaction.isCommand()) return;
+      console.log("getting interaction");
+      const { commandName } = interaction;
+      var command = this.commands.get(commandName);
+      if (command != undefined) await command.execute(interaction);
+      else interaction.reply("Nothing exists for that command");
+      console.log("executed");
     });
   }
-    async registerSlashCommands(): Promise<void> {
-        if (this.discordToken == undefined || this.guildId == undefined || this.botId == undefined) return;
-        const rest = new REST({ version: '10'}).setToken(this.discordToken);
-        try {
-            const commandList = Array.from(this.commands, ([name, value]) => value.data);
-            console.log(`Started refreshing ${commandList.length} application (/) commands.`);
-            const data = await rest.put(
-                Routes.applicationGuildCommands(this.botId, this.guildId),
-                {body: commandList},
-            );
-            console.log(`Successfully reloaded ${data.length} application (/) commands.`);
-        } catch (err) {
-            console.error(err);
-        }
+  async registerSlashCommands(): Promise<void> {
+    if (
+      this.discordToken == undefined ||
+      this.guildId == undefined ||
+      this.botId == undefined
+    )
+      return;
+    const rest = new REST({ version: "10" }).setToken(this.discordToken);
+    try {
+      const commandList = Array.from(
+        this.commands,
+        ([name, value]) => value.data
+      );
+      console.log(
+        `Started refreshing ${commandList.length} application (/) commands.`
+      );
+      const data = await rest.put(
+        Routes.applicationGuildCommands(this.botId, this.guildId),
+        { body: commandList }
+      );
+    } catch (err) {
+      console.error(err);
     }
+  }
   onReady(): void {
     console.log(`Logged in as ${this.user?.tag}`);
   }
-  addCommand(command: Command){
+  addCommand(command: Command) {
     this.commands.set(command.data.name, command);
   }
   async Init(): Promise<void> {

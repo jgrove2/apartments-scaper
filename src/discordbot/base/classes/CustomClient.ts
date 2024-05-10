@@ -12,6 +12,7 @@ import {
 import type ICustomClient from "../interfaces/ICustomClient";
 import type Command from "./Command";
 import Ping from "./commands/Ping";
+import ViewAll from "./commands/ViewAll";
 
 export default class CustomClient extends Client implements ICustomClient {
   discordToken: string | undefined;
@@ -83,6 +84,7 @@ export default class CustomClient extends Client implements ICustomClient {
       .catch((err) => console.error(err));
 
     this.addCommand(new Ping());
+    this.addCommand(new ViewAll());
 
     await this.registerSlashCommands();
   }

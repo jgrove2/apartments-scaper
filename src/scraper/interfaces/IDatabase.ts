@@ -1,6 +1,6 @@
 import type Apartment from "../classes/Apartment";
 import { Database as sqlite } from "bun:sqlite";
-import type Logger from "../classes/Logger";
+import type Logger from "../../util/classes/Logger";
 
 export default interface IDatabase {
   db: sqlite;

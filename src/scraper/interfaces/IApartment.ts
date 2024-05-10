@@ -1,5 +1,3 @@
-import type Logger from "../classes/Logger";
-
 export default interface Apartment {
   $url: string | undefined;
   $price: number | undefined;

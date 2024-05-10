@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "tsx watch index.ts",
     "start": "bun run index.ts",
-    "build": "tsup index.ts --minify" 
+    "build": "tsup index.ts --minify"
   },
   "devDependencies": {
     "@types/bun": "latest",
@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@types/cheerio": "^0.22.35",
+    "ascii-table3": "^0.9.0",
     "cheerio": "^1.0.0-rc.12",
     "cron": "^3.1.7",
     "discord.js": "^14.14.1",

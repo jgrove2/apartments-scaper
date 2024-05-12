@@ -13,7 +13,9 @@ export default class Database implements IDatabase {
   }
   getAllData(): string {
     this.logger.logInfo("getAllData - Starting function");
-    let query = this.db.query(`SELECT * FROM apartments`);
+    let query = this.db.query(
+      `SELECT * FROM apartments WHERE bathrooms >= 2 AND bedrooms = 4`
+    );
     let result = query.all();
     let resultString = "";
     let table = new AsciiTable3().setHeading(

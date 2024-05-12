@@ -17,12 +17,21 @@ export default class Scraper implements IScraper {
       // Extract the label and detail information
       const label = root(element).find(".rentInfoLabel").text().trim();
       const detail = root(element).find(".rentInfoDetail").text().trim();
-
       // Output the label and detail information
       if (label != "Square Feet") {
         apartment_obj.push({ key: label, value: detail });
       }
     });
+    let address = root("div.propertyAddressContainer > h2")
+      .contents()
+      .map((i, el) => root(el).text().trim())
+      .get()
+      .join(" ")
+      .replace(/ +/g, " ")
+      .replace(/[\n\t]/g, "")
+      .trim();
+    this.logger.logInfo(address);
+    apartment_obj.push({ key: "address", value: address });
     this.logger.logInfo("getApartmentObject - Ending Function");
     return apartment_obj;
   }
@@ -138,6 +147,9 @@ export default class Scraper implements IScraper {
           break;
         case "url":
           newApartment.$url = pair.value;
+          break;
+        case "address":
+          newApartment.$address = pair.value;
           break;
       }
     }

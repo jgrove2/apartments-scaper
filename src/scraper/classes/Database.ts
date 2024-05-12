@@ -35,7 +35,7 @@ export default class Database implements IDatabase {
   insertAllNewApartments(apartmentList: Apartment[]): void {
     this.logger.logInfo("insertAllNewApartments - Starting function");
     const insert = this.db.prepare(
-      "INSERT or IGNORE INTO apartments (url, price, bedrooms, bathrooms, new) VALUES ($url, $price, $bedrooms, $bathrooms, $new)"
+      "INSERT or IGNORE INTO apartments (url, address, price, bedrooms, bathrooms, new) VALUES ($url, $address, $price, $bedrooms, $bathrooms, $new)"
     );
     const insertApartments = this.db.transaction((apartments) => {
       for (const aprt of apartments) insert.run(aprt);
@@ -51,6 +51,7 @@ export default class Database implements IDatabase {
     const query = this.db.query(`CREATE TABLE IF NOT EXISTS apartments (
             id INTEGER PRIMARY KEY,
             url TEXT UNIQUE,
+            address TEXT,
             price INTEGER,
             bedrooms INTEGER,
             bathrooms REAL,

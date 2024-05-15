@@ -5,12 +5,26 @@
   "scripts": {
     "dev": "tsx watch index.ts",
     "start": "bun run index.ts",
-    "build": "tsup index.ts --minify"
+    "build": "tsup index.ts --minify",
+    "test": "bun test"
+  },
+  "jest": {
+    "transform": {},
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json"
+    ]
   },
   "devDependencies": {
     "@types/bun": "latest",
     "@types/sqlite3": "^3.1.11",
-    "eslint": "^9.2.0"
+    "eslint": "^9.2.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
@@ -23,7 +37,6 @@
     "discord.js": "^14.14.1",
     "dotenv": "^16.4.5",
     "sqlite3": "^5.1.7",
-    "tsup": "^8.0.2",
     "tsx": "^4.9.3"
   }
 }

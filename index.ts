@@ -15,7 +15,7 @@ async function main() {
 
   DatabaseEngine.createTableIfNotCreated();
   const job = await CronJob.from({
-    cronTime: "0 10 18 * * *",
+    cronTime: "0 0 */2 * * *",
     onTick: async function () {
       let apartmentData = await scraperEngine.getApartmentDataFromURL(
         location_url

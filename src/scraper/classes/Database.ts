@@ -14,7 +14,7 @@ export default class Database implements IDatabase {
   uploadApartmentsToDB(apartmentList: Apartment[]): void {
     this.logger.logInfo("updateApartmentsToDB - Starting function");
     this.deleteAllApartmentsNotExisting(apartmentList);
-    this.updateAllOldApartmentsToOld(apartmentList);
+    this.updateAllOldApartmentsToOld();
     this.insertAllNewApartments(apartmentList);
     this.logger.logInfo("updateApartmentsToDB - Ending function");
   }
@@ -27,7 +27,7 @@ export default class Database implements IDatabase {
     );
     this.logger.logInfo("deleteAllApartmentsNotExisting - Ending function");
   }
-  updateAllOldApartmentsToOld(apartmentList: Apartment[]): void {
+  updateAllOldApartmentsToOld(): void {
     this.logger.logInfo("updateAllOldApartmentsToOld - Starting function");
     this.db.run("UPDATE apartments SET new=0");
     this.logger.logInfo("updateAllOldApartmentsToOld - Ending function");

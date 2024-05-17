@@ -7,7 +7,7 @@ export default interface IDatabase {
   logger: Logger;
   uploadApartmentsToDB(apartmentList: Apartment[]): void;
   deleteAllApartmentsNotExisting(apartmentList: Apartment[]): void;
-  updateAllOldApartmentsToOld(apartmentList: Apartment[]): void;
+  updateAllOldApartmentsToOld(): void;
   insertAllNewApartments(apartmentList: Apartment[]): void;
   createTableIfNotCreated(): void;
 }

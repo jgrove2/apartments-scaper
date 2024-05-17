@@ -4,4 +4,6 @@ export default interface ILogger {
   db: sqlite;
   logger: Logger;
   getAllData(): string;
+  selectNewApartments(): Promise<any[]>;
+  updateAllOldApartmentsToOld(): void;
 }

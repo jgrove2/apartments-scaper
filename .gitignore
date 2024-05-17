@@ -71,6 +71,8 @@ web_modules/
 
 .npm
 
+db/
+
 # Optional eslint cache
 
 .eslintcache

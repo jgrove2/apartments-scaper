@@ -3,6 +3,7 @@ import { AsciiTable3 } from "ascii-table3";
 
 import type IDatabase from "../interfaces/IDatabase";
 import Logger from "../../../util/classes/Logger";
+import { Client } from "discord.js";
 
 export default class Database implements IDatabase {
   db: sqlite;
@@ -10,6 +11,13 @@ export default class Database implements IDatabase {
   constructor() {
     this.db = new sqlite("./db/apartments.db");
     this.logger = new Logger();
+  }
+  async selectNewApartments(): Promise<any[]> {
+    this.logger.logInfo("selectNewApartments - Starting function");
+    let query = this.db.query(`SELECT * FROM apartments WHERE new = 1`);
+    let result = await query.all();
+    this.logger.logInfo("selectNewApartments - Ending function");
+    return result;
   }
   getAllData(): string {
     this.logger.logInfo("getAllData - Starting function");
@@ -38,5 +46,10 @@ export default class Database implements IDatabase {
     this.logger.logInfo("getAllData - Ending function");
     this.logger.logInfo(table.toString());
     return table.toString();
+  }
+  updateAllOldApartmentsToOld(): void {
+    this.logger.logInfo("updateAllOldApartmentsToOld - Starting function");
+    this.db.run("UPDATE apartments SET new=0");
+    this.logger.logInfo("updateAllOldApartmentsToOld - Ending function");
   }
 }

@@ -33,11 +33,13 @@ npm run start
 ### Discord Bot
 
 - On startup the discord bot every hour will check and see if there is any new apartments. If there is it will send data to the channel you set up in env
+![newapartment](newapartmentExample.png)
 
 #### Commands
 
 - /view-all
     - will return a table of all apartments fitting the description from env variables
+    ![viewAll](viewAll.png)
 - /ping
     - Used to test will just return with Pong
 

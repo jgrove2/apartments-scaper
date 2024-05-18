@@ -8,6 +8,7 @@ The apartments.com scraper is given a url for a outlined area from apartments.co
 | Technology | Version |
 | ---------- | -------- |
 | Bun | 1.0.0 |
+| sqlite | X |
 
 ### Install
 
@@ -24,6 +25,24 @@ npm run start
 
 ## Instructions
 
+### Sqlite Database
+
+- If there is no sqlite database file in the db folder open a new folder there
+- The table will be created on start of the program if it is not already there
+
 ### Discord Bot
 
+- On startup the discord bot every hour will check and see if there is any new apartments. If there is it will send data to the channel you set up in env
+
+#### Commands
+
+- /view-all
+    - will return a table of all apartments fitting the description from env variables
+- /ping
+    - Used to test will just return with Pong
+
 ### Scraper
+
+- Give all ids in env variables
+- Give url from apartments.com
+- Every 2 hours on the turn of the hour it will scrap and send data into the sqlite apartments table
